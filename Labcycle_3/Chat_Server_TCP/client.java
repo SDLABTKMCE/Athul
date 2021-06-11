@@ -1,22 +1,28 @@
+package athul;
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 public class client {
-public static void main(String[] args) {
-try{
-ServerSocket s= new ServerSocket("127.0.0.1",1201);
-DataInputStream din=new DataInputStream(s.getInputStream());
-DataOutputStream dout=new DataInputStream(s.getOutputStream());
-BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-String msgin="",msgout="";
-while(!msgin.equals("end")){
-msgout=br.readLine();
-dout.writeUTF(msgout);
-msgin=din.readUTF();
-System.out.println(msgin);
-}
-}
-catch(Exception e)
-{
+public static void main(String args[]) {
+	try {			
+	System.out.println("Client Started");			
+	Socket soc = new Socket("localhost",5000);
+	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	PrintWriter out = new PrintWriter(soc.getOutputStream(),true);
+	BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+	while(true) {			
+	System.out.println("Client :");
+	String str = input.readLine();
+	out.println(str);
+	if("quit".equalsIgnoreCase(str)) {
+	soc.close();
+	System.out.println("Client Stopped");
+	break;			
+	}
+	System.out.println("Server : "+in.readLine());
+	}
+	}
+	catch(Exception e){
+	e.printStackTrace();
 }
 }
 }
